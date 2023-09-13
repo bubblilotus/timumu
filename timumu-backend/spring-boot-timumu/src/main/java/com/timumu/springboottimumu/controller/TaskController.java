@@ -12,7 +12,6 @@ import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin("http://localhost:4200")
 
 @RestController
 @RequestMapping("/api/tasks")

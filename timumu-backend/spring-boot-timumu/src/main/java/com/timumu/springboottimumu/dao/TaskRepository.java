@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
 
-@CrossOrigin("http://localhost:4200")
-//@RepositoryRestResource()
 public interface TaskRepository extends JpaRepository<Task, Long> {
     public Task findById(Id id);
     public List<Task> findByListIdOrderByCompletedAsc

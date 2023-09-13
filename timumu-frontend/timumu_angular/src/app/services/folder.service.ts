@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Folder } from '../models/folder';
 import { environment } from 'src/environments/environment';
@@ -10,6 +10,7 @@ import { NewFolderDialogComponent } from '../components/new-folder-dialog/new-fo
 import { NewItemType } from '../models/new-item-type';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { EventEmitter } from 'stream';
+import { User } from '../models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -25,8 +26,8 @@ export class FolderService {
               private dialog: MatDialog,
               private snackBar: MatSnackBar) { }
 
-  get(): Observable<Folder[]> {
-    return this.httpClient.get<Folder[]>(this.folderUrl);
+  get(user: User){
+    return this.httpClient.post("http://localhost:8080/myFolders", user, { observe: 'response',withCredentials: true });
   }
   
   updateName(folder: Folder, name: string) {

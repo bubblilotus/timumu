@@ -1,0 +1,40 @@
+import { Injectable } from '@angular/core';
+import { HttpInterceptor,HttpRequest,HttpHandler,HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import {Router} from '@angular/router';
+import {tap} from 'rxjs/operators';
+import { User } from '../models/user';
+
+@Injectable()
+export class XhrInterceptor implements HttpInterceptor {
+
+  user = new User();
+  constructor(private router: Router) {}
+
+  intercept(req: HttpRequest<any>, next: HttpHandler) {
+    let httpHeaders = new HttpHeaders();
+    this.user = JSON.parse(sessionStorage.getItem('userdetails'));
+    //login header
+    if(this.user && this.user.password && this.user.email){
+      httpHeaders = httpHeaders.append('Authorization', 'Basic ' + btoa(this.user.email + ':' + this.user.password));
+    }
+    //xsrf on headers
+    let xsrf = sessionStorage.getItem('XSRF-TOKEN');
+    if(xsrf){
+      httpHeaders = httpHeaders.append('X-XSRF-TOKEN', xsrf);  
+    }
+    httpHeaders = httpHeaders.append('X-Requested-With', 'XMLHttpRequest');
+    const xhr = req.clone({
+      headers: httpHeaders
+    });
+    console.log(httpHeaders);
+  return next.handle(xhr).pipe(tap(() => { },
+      (err: any) => {
+        if (err instanceof HttpErrorResponse) {
+          if (err.status !== 401) {
+            return;
+          }
+        //   this.router.navigateByUrl('content');
+        }
+      }));
+  }
+}

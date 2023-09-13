@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -29,6 +29,10 @@ import { TasksComponent } from './components/tasks/tasks.component';
 import { NewFolderDialogComponent } from './components/new-folder-dialog/new-folder-dialog.component';
 import { VertMenuComponent } from './components/vert-menu/vert-menu.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
+import { LoginComponent } from './components/login/login.component';
+import { HeaderComponent } from './components/header/header.component';
+import { ContentComponent } from './components/content/content.component';
+import { AuthInterceptorInterceptor } from './interceptors/auth-interceptor.interceptor';
 
 
 
@@ -45,7 +49,10 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
     TasksComponent,
     NewFolderDialogComponent,
     VertMenuComponent,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    LoginComponent,
+    HeaderComponent,
+    ContentComponent
   ],
   imports: [
     BrowserModule,
@@ -65,7 +72,11 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
     MatSnackBarModule,
     MatAutocompleteModule
   ],
-  providers: [],
+  providers: [{
+    provide : HTTP_INTERCEPTORS,
+      useClass : AuthInterceptorInterceptor,
+      multi : true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

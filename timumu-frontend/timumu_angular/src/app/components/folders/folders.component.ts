@@ -9,6 +9,7 @@ import { FolderService } from 'src/app/services/folder.service';
 import { NewFolderDialogComponent } from '../new-folder-dialog/new-folder-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { NewItemType } from 'src/app/models/new-item-type';
+import { User } from 'src/app/models/user';
 
 @Component({
   selector: 'app-folders',
@@ -16,7 +17,7 @@ import { NewItemType } from 'src/app/models/new-item-type';
   styleUrls: ['./folders.component.css']
 })
 export class FoldersComponent implements OnInit {
-  user: any;
+  user = new User();
   folders: Folder[] = [];
   currentFolderId: any;
 
@@ -28,6 +29,8 @@ export class FoldersComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.user = JSON.parse(sessionStorage.getItem('userdetails'));
+    console.log(this.user)
     this.getFolders();
     this.folderService.folderIdEmitter.subscribe(
       (data) => {
@@ -40,10 +43,14 @@ export class FoldersComponent implements OnInit {
 
   }
   getFolders(){
-    this.folderService.get().subscribe(
-      (data) => {
-        this.folders = data;
+    console.log(this.user);
+    this.folderService.get(this.user).subscribe(
+      (response) => {
+        this.folders = <any> response.body;
         console.log(this.folders);
+      },
+      (error) => {
+        console.log(error);
       }
     );
   }
