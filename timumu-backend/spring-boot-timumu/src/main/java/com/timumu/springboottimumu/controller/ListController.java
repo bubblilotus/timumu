@@ -13,35 +13,44 @@ import java.util.HashSet;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api/lists")
 public class ListController {
     @Autowired
     private ListRepository listRepo;
-    @Autowired
-    ListService listService;
-    @GetMapping
-    public java.util.List<List> getAll(){
-
-        return listRepo.findAll();
+//    @Autowired
+//    ListService listService;
+////    @GetMapping
+////    public java.util.List<List> getAll(){
+////
+////        return listRepo.findAll();
+////    }
+    @GetMapping("/lists/{id}")
+    public java.util.List<List> lists(@PathVariable Long id){
+        java.util.List<List> lists = listRepo.findByFolderId(id);
+        if(lists.size() >0){
+            return lists;
+        }
+        else{
+            return null;
+        }
     }
-    @GetMapping("/search/findByFolderId")
-    public java.util.List<List> findByFolderId(@RequestParam Long id){
-        return listRepo.findByFolderId(id);
-    }
-    @PostMapping
-    public List add(@RequestBody List list){
-        return listRepo.save(list);
-    }
-    @PutMapping
-    public List update(@RequestBody List list){
-        return listService.renameList(list);
-    }
-    @DeleteMapping("/{id}")
-    public void deleteList(@PathVariable Long id){
-        listService.deleteList(id);
-    }
-    @DeleteMapping("/deleteCompletedTasks/{id}")
-    public void deleteCompletedTasks(@PathVariable Long id){
-         listService.deleteCompletedTasks(id);
-    }
+//    @PostMapping("/search/findByFolderId")
+//    public java.util.List<List> findByFolderId(@RequestParam Long id){
+//        return listRepo.findByFolderId(id);
+//    }
+//    @PostMapping
+//    public List add(@RequestBody List list){
+//        return listRepo.save(list);
+//    }
+//    @PutMapping
+//    public List update(@RequestBody List list){
+//        return listService.renameList(list);
+//    }
+//    @DeleteMapping("/{id}")
+//    public void deleteList(@PathVariable Long id){
+//        listService.deleteList(id);
+//    }
+//    @DeleteMapping("/deleteCompletedTasks/{id}")
+//    public void deleteCompletedTasks(@PathVariable Long id){
+//         listService.deleteCompletedTasks(id);
+//    }
 }

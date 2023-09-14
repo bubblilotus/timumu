@@ -4,15 +4,17 @@ import {
   HttpHandler,
   HttpEvent,
   HttpInterceptor,
-  HttpHeaders
+  HttpHeaders,
+  HttpErrorResponse
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { User } from '../models/user';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class AuthInterceptorInterceptor implements HttpInterceptor {
   user = new User();
-  constructor() {}
+  constructor(private router: Router) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     let httpHeaders = new HttpHeaders();
@@ -21,15 +23,27 @@ export class AuthInterceptorInterceptor implements HttpInterceptor {
     if(this.user && this.user.password && this.user.email){
       httpHeaders = httpHeaders.append('Authorization', 'Basic ' + btoa(this.user.email + ':' + this.user.password));
     }
+
     //xsrf on headers
     let xsrf = sessionStorage.getItem('XSRF-TOKEN');
+    console.log(xsrf);
     if(xsrf){
       httpHeaders = httpHeaders.append('X-XSRF-TOKEN', xsrf);  
     }
-    // httpHeaders = httpHeaders.append('X-Requested-With', 'XMLHttpRequest');
+    
+    httpHeaders = httpHeaders.append('X-Requested-With', 'XMLHttpRequest');
     const xhr = request.clone({
       headers: httpHeaders
     });
-    return next.handle(xhr);
+    return next.handle(xhr).pipe(tap(() => { },
+      (err: any) => {
+        if (err instanceof HttpErrorResponse) {
+          if (err.status !== 401) {
+            return;
+          }
+          this.router.navigate(['dashboard']);
+        }
+      }));
   }
+  
 }

@@ -24,9 +24,14 @@ export class ListService {
               private dialog: MatDialog,
               private snackBar: MatSnackBar) { }
 
-  get(folderId: any): Observable<List[]> {
-    const getUrl = `${this.listUrl}/search/findByFolderId?id=${folderId}`;
-    return this.httpClient.get<List[]>(getUrl);
+  // get(folderId: any): Observable<List[]> {
+  //   const getUrl = `${this.listUrl}/search/findByFolderId?id=${folderId}`;
+  //   return this.httpClient.post<List[]>(getUrl, null);
+  // }
+  get(folderId: any){
+    const listUrl = "http://localhost:8080/lists";
+    const getUrl = `${listUrl}/${folderId}`;
+    return this.httpClient.get(getUrl, { observe: 'response',withCredentials: true });
   }
 
   updateName(list: List, name: string) {

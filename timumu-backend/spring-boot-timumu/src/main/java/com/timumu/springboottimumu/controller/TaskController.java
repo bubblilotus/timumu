@@ -14,31 +14,31 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/api/tasks")
+@RequestMapping("tasks")
 public class TaskController {
     @Autowired
     private TaskRepository taskRepository;
     @Autowired
     TaskService taskService;
-    @GetMapping
-    public List<Task> getTasksOrdered(){
-        return taskRepository.findAllByOrderByCompletedAsc();
-    }
-    @GetMapping("/search/findByListId")
-    public List<Task> findTaskByListId(@RequestParam Long id){
+//    @GetMapping
+//    public List<Task> getTasksOrdered(){
+//        return taskRepository.findAllByOrderByCompletedAsc();
+//    }
+    @GetMapping("/{id}")
+    public List<Task> findTaskByListId(@PathVariable Long id){
         return taskRepository.findByListIdOrderByCompletedAsc(id);
     }
-    @PostMapping
-    public Task addTask(@RequestBody Task task){
-        return taskRepository.save(task);
-    }
+//    @PostMapping
+//    public Task addTask(@RequestBody Task task){
+//        return taskRepository.save(task);
+//    }
     @PutMapping
     public Task update(@RequestBody Task task){
         return taskService.updateTask(task);
     }
-    @DeleteMapping("/{id}")
-    public void deleteTask(@PathVariable Long id){
-        taskService.deleteTask(id
-        );
-    }
+//    @DeleteMapping("/{id}")
+//    public void deleteTask(@PathVariable Long id){
+//        taskService.deleteTask(id
+//        );
+//    }
 }

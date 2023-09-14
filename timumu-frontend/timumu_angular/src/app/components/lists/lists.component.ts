@@ -17,54 +17,56 @@ export class ListsComponent implements OnInit {
   folderId: any;
   currentListId: any;
   constructor(private folderService: FolderService,
-    private listService: ListService, 
-    private route: ActivatedRoute, private router: Router, 
+    private listService: ListService,
+    private route: ActivatedRoute, private router: Router,
     private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.folderService.folderIdEmitter.subscribe(
       (data) => {
         this.folderId = data;
-        if(this.folderId != null){
+        console.log(this.folderId);
+        if (this.folderId != null) {
           this.getList();
         }
-        else{
+        else {
           this.lists = [];
           this.listService.changeId(null);
         }
-        
       }
     );
-    this.listService.listIdEmitter.subscribe(
-      (data) => {
-        this.currentListId = data;
-          this.getList();
-      }
-    );
-    
+    // this.listService.listIdEmitter.subscribe(
+    //   (data) => {
+    //     this.currentListId = data;
+    //       this.getList();
+    //   }
+    // );
+
   }
-  selectList(listId: any){
+  selectList(listId: any) {
     this.listService.changeId(listId);
   }
-  getList(){
-   this.listService.get(this.folderId).subscribe(
-        (data) => {
-          this.lists = data;
-        }
-      );
+  getList() {
+    this.listService.get(this.folderId).subscribe(
+      (data) => {
+        this.lists = <any> data.body;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
 
+    //one to
 
-      //one to
-    
   }
-  newList(){
-    if(this.folderId != null){
+  newList() {
+    if (this.folderId != null) {
       this.listService.openNewFolderDialog(this.folderId);
-    }else{
+    } else {
       this.folderService.openSnackBar("please select a folder first.", 'ok');
     }
   }
-  delete(list: List){
+  delete(list: List) {
     this.listService.delete(list.id).subscribe(
       () => {
         this.getList();
@@ -72,7 +74,7 @@ export class ListsComponent implements OnInit {
       }
     );
   }
-  
- 
+
+
 
 }

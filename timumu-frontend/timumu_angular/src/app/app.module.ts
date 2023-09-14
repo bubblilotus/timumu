@@ -33,6 +33,7 @@ import { LoginComponent } from './components/login/login.component';
 import { HeaderComponent } from './components/header/header.component';
 import { ContentComponent } from './components/content/content.component';
 import { AuthInterceptorInterceptor } from './interceptors/auth-interceptor.interceptor';
+import { LogoutComponent } from './components/logout/logout.component';
 
 
 
@@ -52,7 +53,8 @@ import { AuthInterceptorInterceptor } from './interceptors/auth-interceptor.inte
     ConfirmationDialogComponent,
     LoginComponent,
     HeaderComponent,
-    ContentComponent
+    ContentComponent,
+    LogoutComponent
   ],
   imports: [
     BrowserModule,

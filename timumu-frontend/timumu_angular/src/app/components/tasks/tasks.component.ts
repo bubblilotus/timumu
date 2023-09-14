@@ -47,7 +47,7 @@ export class TasksComponent implements OnInit {
   getTasks(listId: any) {
     this.taskSerivce.get(listId).subscribe(
       (data) => {
-        this.tasks = data;
+        this.tasks = <any> data.body;
       }
     );
   }

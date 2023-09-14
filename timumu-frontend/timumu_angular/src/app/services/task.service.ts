@@ -19,9 +19,9 @@ export class TaskService {
               private dialog: MatDialog,
               private snackBar: MatSnackBar){}
   
-  get(listId: any): Observable<Task[]> {
-    const getUrl = `${this.taskUrl}/search/findByListId?id=${listId}`;
-    return this.httpClient.get<Task[]>(getUrl);
+  get(listId: any){
+    const getUrl = `http://localhost:8080/tasks/${listId}`;
+    return this.httpClient.get(getUrl,  { observe: 'response',withCredentials: true });
   }
 
   post(task: Task) {

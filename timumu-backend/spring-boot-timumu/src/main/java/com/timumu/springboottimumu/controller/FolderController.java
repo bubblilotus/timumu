@@ -25,7 +25,7 @@ public class FolderController {
 //
 //        return folderRepository.findById(id).orElseThrow();
 //    }
-    @PostMapping("/myFolders")
+    @PostMapping ("/myFolders")
     public List<Folder> getFolders(@RequestBody Customer customer){
         List<Folder> folders = folderRepository.findByCustomerId(customer.getId());
         if (folders.size() > 0){

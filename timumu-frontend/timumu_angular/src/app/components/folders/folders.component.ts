@@ -10,6 +10,7 @@ import { NewFolderDialogComponent } from '../new-folder-dialog/new-folder-dialog
 import { MatDialog } from '@angular/material/dialog';
 import { NewItemType } from 'src/app/models/new-item-type';
 import { User } from 'src/app/models/user';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-folders',
@@ -24,7 +25,8 @@ export class FoldersComponent implements OnInit {
   constructor(private folderService: FolderService,
     private router: Router,
     private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer) {
+    private domSanitizer: DomSanitizer,
+    private httpClient: HttpClient) {
     this.addSvgs();
   }
 
@@ -44,10 +46,12 @@ export class FoldersComponent implements OnInit {
   }
   getFolders(){
     console.log(this.user);
+    
     this.folderService.get(this.user).subscribe(
       (response) => {
         this.folders = <any> response.body;
         console.log(this.folders);
+        console.log(response);
       },
       (error) => {
         console.log(error);
